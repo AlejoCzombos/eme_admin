@@ -1,0 +1,10 @@
+fastapi
+starlette
+starlette-admin
+sqlalchemy
+sqlalchemy-file
+uvicorn
+
+pillow
+fasteners
+itsdangerous
