@@ -8,3 +8,6 @@ uvicorn
 pillow
 fasteners
 itsdangerous
+
+passlib
+bcrypt

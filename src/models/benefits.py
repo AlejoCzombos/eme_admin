@@ -18,8 +18,8 @@ class Beneficio(Base):
         ImageField(
             image_validator=ImageValidator(
                 allowed_content_types=["image/jpeg", "image/png"],
-                min_wh=(200, 200),
-                max_wh=(600, 600),
+                min_wh=(100, 100),
+                max_wh=(800, 800),
                 max_aspect_ratio=1.0
             )
         ),
@@ -29,6 +29,21 @@ class Beneficio(Base):
     categoria = relationship('CategoriaBeneficio')
     localidad_id = Column(Integer, ForeignKey('localidad.id'))
     localidad = relationship('Localidad')
+    
+    def to_dict(self):
+        imagen_path = getattr(self.imagen, 'path', '')
+        # Procesa la ruta de la imagen
+        imagen_url = imagen_path.replace('./static\\', '').replace('\\', '/').replace('default/', '')
+        
+        return {
+            "id": self.id,
+            "title": self.titulo,
+            "description": self.descripcion,
+            "discount": self.descuento,
+            "category": self.categoria.nombre,
+            "locality": self.localidad_id,
+            "imagen_url": f"/api/images/{imagen_url}"
+        }
 
 
 class CategoriaBeneficio(Base):
@@ -36,6 +51,9 @@ class CategoriaBeneficio(Base):
     
     id = Column(Integer, primary_key=True)
     nombre = Column(String, nullable=False)
+    
+    def get_name(self):
+        return self.nombre
 
 
 class Localidad(Base):
@@ -43,16 +61,6 @@ class Localidad(Base):
     
     id = Column(Integer, primary_key=True)
     nombre = Column(String, nullable=False)
-
-
-class BeneficioView(ModelView):
-    column_list = ['titulo', 'descripcion', 'descuento', 'imagen', 'categoria.nombre', 'localidad.nombre']
     
-
-
-class CategoriaBeneficioView(ModelView):
-    column_list = ['nombre']
-
-
-class LocalidadView(ModelView):
-    column_list = ['nombre']
+    def get_name(self):
+        return self.nombre
