@@ -8,6 +8,7 @@ from src.admin import admin
 from src.database import Base, engine
 from src.storage import setup_storage
 from src.api.benefits import beneficios, Imagenes
+from src.api.specialists import Especialistas
 
 Base.metadata.create_all(engine)
 
@@ -23,6 +24,9 @@ routes = [
     ),
     Route(
       "/api/beneficios", beneficios
+    ),
+    Route(
+        "/api/especialistas", Especialistas
     ),
     Route(
         "/api/images/{file_id}", Imagenes

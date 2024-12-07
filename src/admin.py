@@ -6,6 +6,8 @@ from src.database import engine, db_session
 
 from src.models.benefits import *
 from src.views.benefits import *
+from src.models.specialists import *
+from src.views.specialists import *
 from src.auth import MyAuthProvider
 from src.config import SECRET
 
@@ -27,6 +29,18 @@ admin.add_view(
             BeneficioView(Beneficio, icon="fas fa-list"),
             CategoriaBeneficioView(CategoriaBeneficio, icon="fas fa-list"),
             LocalidadView(Localidad, icon="fas fa-list")
+        ]
+    )
+)
+
+admin.add_view(
+    DropDown(
+        "Especialistas",
+        icon="fa fa-user-md",
+        views=[
+            EspecialistaView(Especialista, icon="fas fa-list"),
+            EspecialidadView(Especialidad, icon="fas fa-list"),
+            DiaView(Dia, icon="fas fa-list")
         ]
     )
 )

@@ -1,9 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy_file import ImageField, FileField
+from sqlalchemy_file import ImageField
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_file.validators import ImageValidator
-from starlette_admin.contrib.sqla import ModelView
 
 Base = declarative_base()
 
