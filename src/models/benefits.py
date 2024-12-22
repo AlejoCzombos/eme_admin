@@ -10,8 +10,8 @@ class Beneficio(Base):
     __tablename__ = 'beneficio'
     
     id = Column(Integer, primary_key=True)
-    titulo = Column(String, nullable=False)
-    descripcion = Column(String)
+    titulo = Column(String(100), nullable=False)
+    descripcion = Column(String(255))
     descuento = Column(Integer, nullable=False)
     imagen = Column(
         ImageField(
@@ -49,7 +49,7 @@ class CategoriaBeneficio(Base):
     __tablename__ = 'categoria_beneficio'
     
     id = Column(Integer, primary_key=True)
-    nombre = Column(String, nullable=False)
+    nombre = Column(String(150), nullable=False)
     
     def get_name(self):
         return self.nombre
@@ -59,7 +59,7 @@ class Localidad(Base):
     __tablename__ = 'localidad'
     
     id = Column(Integer, primary_key=True)
-    nombre = Column(String, nullable=False)
+    nombre = Column(String(150), nullable=False)
     
     def get_name(self):
         return self.nombre

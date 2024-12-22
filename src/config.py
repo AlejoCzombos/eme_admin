@@ -1,2 +1,10 @@
-DATABASE_URL = "sqlite:///basic.db"
+DATABASE_NAME = "eme"
+
+DATABASE_HOST = "localhost:3306"
+
+DATABASE_USER = "root"
+
+DATABASE_PASSWORD = "root"
+
 SECRET = "1234567890"
+ADMIN_PASSWORD = "admin"
