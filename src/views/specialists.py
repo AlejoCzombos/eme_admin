@@ -45,8 +45,8 @@ class DiaView(ModelView):
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]
     
-    # return "read" in request.state.user["roles"]
-        return True
+    def can_view_details(self, request: Request) -> bool:
+        return "read" in request.state.user["roles"]
 
     def can_create(self, request: Request) -> bool:
         return "create" in request.state.user["roles"]

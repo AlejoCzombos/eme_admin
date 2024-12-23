@@ -1,0 +1,46 @@
+services:
+  mysql:
+    container_name: eme_admin_mysql
+    image: mysql:8.0
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DB_HOST: mysql
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+        - app-network
+    restart: unless-stopped
+
+  app:
+    container_name: eme_admin_app
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SECRET: ${SECRET}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+        - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

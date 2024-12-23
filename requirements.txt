@@ -12,3 +12,4 @@ itsdangerous
 passlib
 bcrypt
 pymysql
+cryptography
