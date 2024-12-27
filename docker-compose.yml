@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  eme_admin:
+    build: .
+    container_name: eme_admin_container
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    environment:
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      SECRET: ${SECRET}
