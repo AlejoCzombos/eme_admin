@@ -8,6 +8,10 @@ from src.models.benefits import *
 from src.views.benefits import *
 from src.models.specialists import *
 from src.views.specialists import *
+from src.models.administrator import *
+from src.views.administrator import *
+from src.models.images import *
+from src.views.images import *
 from src.auth import MyAuthProvider
 from src.config import SECRET
 
@@ -26,9 +30,8 @@ admin.add_view(
         "Beneficios",
         icon="fa fa-ticket",
         views=[
-            BeneficioView(Beneficio, icon="fas fa-list"),
-            CategoriaBeneficioView(CategoriaBeneficio, icon="fas fa-list"),
-            LocalidadView(Localidad, icon="fas fa-list")
+            BeneficioView(Beneficio, icon="fas fa-list", label="Beneficios"),
+            CategoriaBeneficioView(CategoriaBeneficio, icon="fas fa-list", label="Categorías de beneficios")
         ]
     )
 )
@@ -38,9 +41,36 @@ admin.add_view(
         "Especialistas",
         icon="fa fa-user-md",
         views=[
-            EspecialistaView(Especialista, icon="fas fa-list"),
-            EspecialidadView(Especialidad, icon="fas fa-list"),
+            EspecialistaView(Especialista, icon="fas fa-list", label="Especialistas"),
+            EspecialidadView(Especialidad, icon="fas fa-list", label="Especialidades"),
             DiaView(Dia, icon="fas fa-list")
         ]
     )
+)
+
+admin.add_view(
+    DropDown(
+        "Administradores",
+        icon="fa fa-user",
+        views=[
+            AdministradorView(Administrador, icon="fas fa-list", label="Administradores"),
+            AdministradorActualView(AdministradorActual, icon="fas fa-list", label="Administrador actual (único)"),
+            TokenView(Token, icon="fas fa-list", label="Token actual (único)")
+        ]
+    )
+)
+
+admin.add_view(
+    DropDown(
+        "Imágenes",
+        icon="fa fa-image",
+        views=[
+            BannerView(Banner, icon="fas fa-list", label="Banners"),
+            SponsorView(Sponsor, icon="fas fa-list", label="Sponsors"),
+        ]
+    )
+)
+
+admin.add_view(
+    LocalidadView(Localidad, icon="fas fa-list", label="Localidades")
 )

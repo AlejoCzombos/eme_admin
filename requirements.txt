@@ -14,3 +14,4 @@ bcrypt
 pymysql
 cryptography
 python-dotenv
+httpx

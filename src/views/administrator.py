@@ -1,45 +1,29 @@
 from starlette_admin.contrib.sqla import ModelView
 from starlette.requests import Request
-from sqlalchemy_file import ImageField
-from sqlalchemy import text
 
 from src.database import Session
-from src.models.benefits import Beneficio 
+from src.models.administrator import Token, AdministradorActual
 
-class BeneficioView(ModelView):
-    column_list = ['titulo', 'descripcion', 'descuento', 'imagen', 'categoria.nombre', 'localidad.nombre']
-    
-    # async def after_create(self, request, obj):
-    #     db_session = Session()
-    #     try:
-    #         # Recuperar el objeto desde la base de datos
-    #         image_url = obj.imagen.url
-    #         if not image_url:
-    #             print("Error: No se encontró la URL en la imagen")
-    #             return
+# Define tu vista personalizada
+class AdministradorActualView(ModelView):
+    async def before_create(self, request, data, obj):
+        db_session = Session()
+        try:
+            existing_admin = db_session.query(AdministradorActual).first()
+            if existing_admin:
+                raise ValueError("Ya existe un administrador actual. Elimínalo antes de agregar otro.")
+        finally:
+            db_session.close()
+        
+    async def before_edit(self, request, data, obj):
+        db_session = Session()
+        try:
+            existing_admin = db_session.query(AdministradorActual).first()
+            if existing_admin:
+                raise ValueError("Ya existe un administrador actual. Elimínalo antes de agregar otro.")
+        finally:
+            db_session.close()
 
-    #         # Limpiar la URL
-    #         # cleaned_url = image_url.replace("//", "/").split("?")[0]
-    #         cleaned_url = image_url.replace("//", "/")
-    #         print("URL limpia:", cleaned_url)
-
-    #         # Actualizar la URL en la base de datos
-    #         query = text("""
-    #             UPDATE beneficio
-    #             SET imagen = JSON_SET(imagen, '$.url', :new_url)
-    #             WHERE id = :beneficio_id
-    #         """)
-
-    #         db_session.execute(query, {"new_url": cleaned_url, "beneficio_id": obj.id})
-    #         db_session.commit()
-    #         print("URL actualizada exitosamente:", cleaned_url)
-
-    #     except Exception as e:
-    #         print("Error al modificar la URL:", str(e))
-    #         db_session.rollback()
-    #     finally:
-    #         db_session.close()
-    
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]
 
@@ -55,13 +39,10 @@ class BeneficioView(ModelView):
     def can_delete(self, request: Request) -> bool:
         return "delete" in request.state.user["roles"]
 
-
-class CategoriaBeneficioView(ModelView):
-    column_list = ['nombre']
-    
+class AdministradorView(ModelView):
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]
-    
+
     def can_view_details(self, request: Request) -> bool:
         return "read" in request.state.user["roles"]
 
@@ -74,13 +55,29 @@ class CategoriaBeneficioView(ModelView):
     def can_delete(self, request: Request) -> bool:
         return "delete" in request.state.user["roles"]
 
-
-class LocalidadView(ModelView):
-    column_list = ['nombre']
+class TokenView(ModelView):
+    
+    async def before_create(self, request, data, obj):
+        db_session = Session()
+        try:
+            existing_token = db_session.query(Token).first()
+            if existing_token:
+                raise ValueError("Ya existe un token. Elimínalo antes de agregar otro.")
+        finally:
+            db_session.close()
+        
+    async def before_edit(self, request, data, obj):
+        db_session = Session()
+        try:
+            existing_token = db_session.query(Token).first()
+            if existing_token:
+                raise ValueError("Ya existe un token. Elimínalo antes de agregar otro.")
+        finally:
+            db_session.close()
     
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]
-    
+
     def can_view_details(self, request: Request) -> bool:
         return "read" in request.state.user["roles"]
 

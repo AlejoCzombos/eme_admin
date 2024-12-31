@@ -9,6 +9,7 @@ from src.database import Base, engine
 from src.storage import setup_storage
 from src.api.benefits import beneficios, Imagenes
 from src.api.specialists import Especialistas
+from src.api.form import FormularioEndpoint 
 
 Base.metadata.create_all(engine)
 
@@ -30,7 +31,10 @@ routes = [
     ),
     Route(
         "/api/images/{file_id}", Imagenes
-    )
+    ),
+    Route(
+        "/api/form", FormularioEndpoint, methods=["POST"]
+    ),
 ]
 
 app = Starlette(routes=routes)
@@ -39,7 +43,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 

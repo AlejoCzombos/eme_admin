@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 from src.config import DATABASE_NAME, DATABASE_HOST, DATABASE_USER, DATABASE_PASSWORD
 
@@ -14,5 +14,6 @@ engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
-
 db_session = SessionLocal()
+
+Session = scoped_session(SessionLocal)

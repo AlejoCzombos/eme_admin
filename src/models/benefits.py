@@ -20,7 +20,8 @@ class Beneficio(Base):
                 min_wh=(100, 100),
                 max_wh=(800, 800),
                 max_aspect_ratio=1.0
-            )
+            ),
+            upload_storage="default"
         ),
         nullable=False
     )
@@ -30,9 +31,10 @@ class Beneficio(Base):
     localidad = relationship('Localidad')
     
     def to_dict(self):
-        imagen_path = getattr(self.imagen, 'path', '')
-        # Procesa la ruta de la imagen
-        imagen_url = imagen_path.replace('./static\\', '').replace('\\', '/').replace('default/', '')
+        imagen_url = getattr(self.imagen, 'url', '')
+        # print(imagen_path)
+        # # Procesa la ruta de la imagen
+        # imagen_url = imagen_path.replace('./static\\', '').replace('\\', '/').replace('default/', '')
         
         return {
             "id": self.id,
@@ -41,7 +43,7 @@ class Beneficio(Base):
             "discount": self.descuento,
             "category": self.categoria.nombre,
             "locality": self.localidad_id,
-            "imagen_url": f"/api/images/{imagen_url}"
+            "imagen_url": imagen_url
         }
 
 
