@@ -16,9 +16,10 @@ class Beneficio(Base):
     imagen = Column(
         ImageField(
             image_validator=ImageValidator(
-                allowed_content_types=["image/jpeg", "image/png"],
+                allowed_content_types=["image/jpeg", "image/png", "image/webp"],
                 min_wh=(100, 100),
                 max_wh=(800, 800),
+                min_aspect_ratio=1.0,
                 max_aspect_ratio=1.0
             ),
             upload_storage="default"
@@ -32,9 +33,6 @@ class Beneficio(Base):
     
     def to_dict(self):
         imagen_url = getattr(self.imagen, 'url', '')
-        # print(imagen_path)
-        # # Procesa la ruta de la imagen
-        # imagen_url = imagen_path.replace('./static\\', '').replace('\\', '/').replace('default/', '')
         
         return {
             "id": self.id,

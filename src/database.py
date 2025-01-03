@@ -8,7 +8,6 @@ from src.models.benefits import Base
 
 
 DATABASE_URL = f"mysql+pymysql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}"
-print(DATABASE_URL)
 
 engine = create_engine(DATABASE_URL)
 

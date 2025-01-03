@@ -7,7 +7,8 @@ from starlette.middleware.cors import CORSMiddleware
 from src.admin import admin
 from src.database import Base, engine
 from src.storage import setup_storage
-from src.api.benefits import beneficios, Imagenes
+from src.api.benefits import beneficios
+from src.api.images import Banners, Sponsors
 from src.api.specialists import Especialistas
 from src.api.form import FormularioEndpoint 
 
@@ -30,7 +31,10 @@ routes = [
         "/api/especialistas", Especialistas
     ),
     Route(
-        "/api/images/{file_id}", Imagenes
+        "/api/sponsors", Sponsors
+    ),
+    Route(
+        "/api/banners", Banners
     ),
     Route(
         "/api/form", FormularioEndpoint, methods=["POST"]
