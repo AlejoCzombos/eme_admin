@@ -10,6 +10,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     name = Column(String(150), nullable=False)
     roles = Column(String(255), nullable=False)
+    branch_id = Column(Integer, nullable=True)
 
     def verify_password(self, password: str) -> bool:
         return bcrypt.verify(password, self.password_hash)

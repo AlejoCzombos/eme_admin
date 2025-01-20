@@ -1,17 +1,29 @@
-from dotenv import load_dotenv, dotenv_values
+import os
 
-load_dotenv()
-config = dotenv_values(".env")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+DATABASE_HOST = os.getenv("DATABASE_HOST")
+DATABASE_USER = os.getenv("DATABASE_USER")
+DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
 
-DATABASE_NAME = config.get("DATABASE_NAME")
-DATABASE_HOST = config.get("DATABASE_HOST")
-DATABASE_USER = config.get("DATABASE_USER")
-DATABASE_PASSWORD = config.get("DATABASE_PASSWORD")
+SECRET = os.getenv("SECRET")
+RCIA_ADMIN_NAME = os.getenv("RCIA_ADMIN_NAME")
+RCIA_ADMIN_PASSWORD = os.getenv("RCIA_ADMIN_PASSWORD")
+CTES_ADMIN_NAME = os.getenv("CTES_ADMIN_NAME")
+CTES_ADMIN_PASSWORD = os.getenv("CTES_ADMIN_PASSWORD")
+RSP_ADMIN_NAME = os.getenv("RSP_ADMIN_NAME")
+RSP_ADMIN_PASSWORD = os.getenv("RSP_ADMIN_PASSWORD")
+SUPER_ADMIN_NAME = os.getenv("SUPER_ADMIN_NAME")
+SUPER_ADMIN_PASSWORD = os.getenv("SUPER_ADMIN_PASSWORD")
+# RCIA_ADMIN_NAME="admin_rcia"
+# RCIA_ADMIN_PASSWORD="admin"
+# CTES_ADMIN_NAME="admin_ctes"
+# CTES_ADMIN_PASSWORD="admin"
+# RSP_ADMIN_NAME="admin_rsp"
+# RSP_ADMIN_PASSWORD="admin"
+# SUPER_ADMIN_NAME="admin"
+# SUPER_ADMIN_PASSWORD="admin"
 
-ADMIN_PASSWORD = config.get("ADMIN_PASSWORD")
-SECRET = config.get("SECRET")
-
-S3_BUCKET = config.get("S3_BUCKET")
-S3_REGION = config.get("S3_REGION")
-S3_ACCESS_KEY = config.get("S3_ACCESS_KEY")
-S3_SECRET_ACCESS = config.get("S3_SECRET_ACCESS")
+S3_BUCKET = os.getenv("S3_BUCKET")
+S3_REGION = os.getenv("S3_REGION")
+S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
+S3_SECRET_ACCESS = os.getenv("S3_SECRET_ACCESS")

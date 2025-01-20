@@ -1,0 +1,23 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build -t alejoczombos/eme-back:latest .
+    - name: Push the Docker image
+      run: |
+        docker login -u alejoczombos -p ${{ secrets.DOCKER_HUB_TOKEN }}
+        docker push alejoczombos/eme-back:latest

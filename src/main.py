@@ -12,9 +12,13 @@ from src.api.images import Banners, Sponsors
 from src.api.specialists import Especialistas
 from src.api.form import FormularioEndpoint 
 
+from src.scripts.run_scripts import init as init_database
+
 Base.metadata.create_all(engine)
 
 setup_storage()
+
+init_database()
 
 routes = [
     Mount(

@@ -13,6 +13,7 @@ class Beneficio(Base):
     titulo = Column(String(100), nullable=False)
     descripcion = Column(String(255))
     descuento = Column(Integer, nullable=False)
+    texto_descuento = Column(String(255))
     imagen = Column(
         ImageField(
             image_validator=ImageValidator(
@@ -54,6 +55,9 @@ class CategoriaBeneficio(Base):
     def get_name(self):
         return self.nombre
 
+    async def __admin_repr__(self, request):
+        return f"{self.nombre}"
+
 
 class Localidad(Base):
     __tablename__ = 'localidad'
@@ -63,3 +67,6 @@ class Localidad(Base):
     
     def get_name(self):
         return self.nombre
+
+    async def __admin_repr__(self, request):
+        return f"{self.nombre}"

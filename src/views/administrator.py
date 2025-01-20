@@ -1,28 +1,31 @@
 from starlette_admin.contrib.sqla import ModelView
+from starlette_admin.exceptions import FormValidationError
 from starlette.requests import Request
 
 from src.database import Session
-from src.models.administrator import Token, AdministradorActual
+from src.models.administrator import Token, AdministradorActual, Administrador
 
-# Define tu vista personalizada
 class AdministradorActualView(ModelView):
-    async def before_create(self, request, data, obj):
+    fields = ["administrador"]
+    
+    async def validate(self, request: Request, data: dict()) -> None:
+        errors: Dict[str, str] = dict()
+        
         db_session = Session()
         try:
             existing_admin = db_session.query(AdministradorActual).first()
             if existing_admin:
-                raise ValueError("Ya existe un administrador actual. Elimínalo antes de agregar otro.")
+                errors["administrador"] = "Ya existe un administrador actual. Elimínalo antes de agregar otro."
         finally:
             db_session.close()
         
-    async def before_edit(self, request, data, obj):
-        db_session = Session()
-        try:
-            existing_admin = db_session.query(AdministradorActual).first()
-            if existing_admin:
-                raise ValueError("Ya existe un administrador actual. Elimínalo antes de agregar otro.")
-        finally:
-            db_session.close()
+        
+        # if not data.get("administrador"):
+        #     errors["administrador"] = "El administrador es requerido."
+        
+        if len(errors) > 0:
+            raise FormValidationError(errors)
+        return await super().validate(request, data)
 
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]
@@ -57,23 +60,21 @@ class AdministradorView(ModelView):
 
 class TokenView(ModelView):
     
-    async def before_create(self, request, data, obj):
-        db_session = Session()
-        try:
-            existing_token = db_session.query(Token).first()
-            if existing_token:
-                raise ValueError("Ya existe un token. Elimínalo antes de agregar otro.")
-        finally:
-            db_session.close()
+    async def validate(self, request: Request, data) -> None:
+        errors: Dict[str, str] = dict()
         
-    async def before_edit(self, request, data, obj):
         db_session = Session()
         try:
             existing_token = db_session.query(Token).first()
             if existing_token:
-                raise ValueError("Ya existe un token. Elimínalo antes de agregar otro.")
+                errors["token"] = "Ya existe un token. Elimínalo antes de agregar otro."
         finally:
             db_session.close()
+    
+        
+        if len(errors) > 0:
+            raise FormValidationError(errors)
+        return await super().validate(request, data)
     
     def is_accessible(self, request: Request) -> bool:
         return "admin" in request.state.user["roles"]

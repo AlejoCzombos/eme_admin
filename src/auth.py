@@ -41,7 +41,8 @@ class MyAuthProvider(AuthProvider):
                 request.state.user = {
                     "id": user.id,
                     "username": user.username,
-                    "roles": user.roles.split(",")
+                    "roles": user.roles.split(","),
+                    "sucursal_id": user.branch_id,
                 }
                 return True
         return False

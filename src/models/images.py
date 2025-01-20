@@ -13,8 +13,8 @@ class Banner(Base):
         ImageField(
             image_validator=ImageValidator(
                 allowed_content_types=["image/jpeg", "image/png", "image/webp"],
-                min_aspect_ratio=3.2,
-                max_aspect_ratio=3.5
+                min_wh=(1720, 480),
+                max_wh=(1730, 550),
             ),
             upload_storage="default"
         ),
@@ -37,14 +37,14 @@ class Sponsor(Base):
         ImageField(
             image_validator=ImageValidator(
                 allowed_content_types=["image/jpeg", "image/png", "image/webp", "image/svg+xml"],
-                min_wh=(100, 100),
+                min_wh=(200, 200),
                 max_wh=(800, 800),
                 min_aspect_ratio=1.0,
                 max_aspect_ratio=1.0
             ),
             upload_storage="default"
         ),
-        nullable=False
+        nullable=False,
     )
     
     def to_dict(self):

@@ -1,14 +1,13 @@
-import os
-from passlib.hash import bcrypt
-from src.models.user import User
-from src.config import ADMIN_PASSWORD
-from src.models.benefits import Localidad # Asegúrate de tener un modelo para sucursales
-from src.models.specialists import Dia # Asegúrate de tener un modelo para días
+from src.models.benefits import Localidad
+from src.models.specialists import Dia
 from src.database import db_session
 from sqlalchemy.exc import SQLAlchemyError
 
-
 def create_days():
+    if db_session.query(Dia).count() > 0:
+        print("Dias ya existen en la base de datos.")
+        return
+    
     days = [
         "Lunes",
         "Martes",
@@ -24,6 +23,10 @@ def create_days():
 
 
 def create_branches():
+    if db_session.query(Localidad).count() > 0:
+        print("Sucursales ya existen en la base de datos.")
+        return
+    
     branches = [
         "Resistencia",
         "Corrientes",
@@ -34,26 +37,10 @@ def create_branches():
     print("Sucursales añadidas correctamente.")
 
 
-def create_user():
-    password = ADMIN_PASSWORD
-    if not password:
-        raise ValueError("Variable de entorno 'ADMIN_PASSWORD' no encontrada.")
-
-    new_user = User(
-        username="admin",
-        password_hash=bcrypt.hash(password),
-        name="Administrator",
-        roles="read,create,edit,delete,admin,action_make_published",
-    )
-    db_session.add(new_user)
-    print("Usuario añadido correctamente.")
-
-
 def main():
     try:
         create_days()
         create_branches()
-        create_user()
         db_session.commit()
         print("Proceso completado.")
     except SQLAlchemyError as e:

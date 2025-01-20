@@ -10,6 +10,9 @@ class Administrador(Base):
     admin_id = Column(Integer, nullable=False)
     correo = Column(String(150), nullable=False)
     nombre = Column(String(100), nullable=False)
+    
+    async def __admin_repr__(self, request):
+        return f"{self.nombre} ({self.correo})"
 
 class AdministradorActual(Base):
     __tablename__ = 'administrador_actual'
@@ -23,3 +26,6 @@ class Token(Base):
     
     id = Column(Integer, primary_key=True)
     token = Column(String(250), nullable=False)
+    
+    async def __admin_repr__(self, request):
+        return f"{self.token}"

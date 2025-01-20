@@ -43,7 +43,7 @@ admin.add_view(
         views=[
             EspecialistaView(Especialista, icon="fas fa-list", label="Especialistas"),
             EspecialidadView(Especialidad, icon="fas fa-list", label="Especialidades"),
-            DiaView(Dia, icon="fas fa-list")
+            # DiaView(Dia, icon="fas fa-list")
         ]
     )
 )
@@ -72,5 +72,12 @@ admin.add_view(
 )
 
 admin.add_view(
-    LocalidadView(Localidad, icon="fas fa-list", label="Localidades")
+    DropDown(
+        "Otros",
+        icon="fa fa-list",
+        views=[
+            LocalidadView(Localidad, icon="fas fa-list", label="Localidades"),
+            DiaView(Dia, icon="fas fa-list", label="Días")
+        ]
+    )
 )

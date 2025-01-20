@@ -29,15 +29,24 @@ class Especialista(Base):
             'specialty': self.especialidad.nombre,
             'days': [dia.nombre for dia in self.dias]
         }
+    
+    async def __admin_repr__(self, request):
+        return f"{self.nombre}"
 
 class Especialidad(Base):
     __tablename__ = 'especialidad'
     
     id = Column(Integer, primary_key=True)
     nombre = Column(String(150), nullable=False)
+    
+    async def __admin_repr__(self, request):
+        return f"{self.nombre}"
 
 class Dia(Base):
     __tablename__ = 'dia'
     
     id = Column(Integer, primary_key=True)
     nombre = Column(String(150), nullable=False)
+    
+    async def __admin_repr__(self, request):
+        return f"{self.nombre}"
