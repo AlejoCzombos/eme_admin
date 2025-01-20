@@ -1,7 +1,7 @@
 import httpx
 from starlette.responses import JSONResponse
 from starlette.endpoints import HTTPEndpoint
-from src.database import Session
+from src.database import get_db
 from src.models.administrator import AdministradorActual, Token
 
 CRM_ENDPOINT = "https://api.clientify.net/v1/contacts/"
@@ -9,9 +9,8 @@ CRM_ENDPOINT = "https://api.clientify.net/v1/contacts/"
 class FormularioEndpoint(HTTPEndpoint):
     async def post(self, request):
         data = await request.json() 
-        db_session = Session()
         
-        try:
+        with get_db() as db_session:
             admin_actual = db_session.query(AdministradorActual).first()
             if not admin_actual:
                 return JSONResponse({"error": "No hay administrador actual configurado."}, status_code=400)
@@ -66,5 +65,3 @@ class FormularioEndpoint(HTTPEndpoint):
                 )
             
             Response = JSONResponse({"message": "Datos enviados exitosamente."}, status_code=201)
-        finally:
-            db_session.close()

@@ -2,7 +2,7 @@ from starlette_admin.contrib.sqla import ModelView
 from starlette_admin.exceptions import FormValidationError
 from starlette.requests import Request
 
-from src.database import Session
+from src.database import get_db
 from src.models.administrator import Token, AdministradorActual, Administrador
 
 class AdministradorActualView(ModelView):
@@ -11,13 +11,10 @@ class AdministradorActualView(ModelView):
     async def validate(self, request: Request, data: dict()) -> None:
         errors: Dict[str, str] = dict()
         
-        db_session = Session()
-        try:
+        with get_db() as db_session:
             existing_admin = db_session.query(AdministradorActual).first()
             if existing_admin:
                 errors["administrador"] = "Ya existe un administrador actual. Elimínalo antes de agregar otro."
-        finally:
-            db_session.close()
         
         
         # if not data.get("administrador"):
@@ -63,13 +60,10 @@ class TokenView(ModelView):
     async def validate(self, request: Request, data) -> None:
         errors: Dict[str, str] = dict()
         
-        db_session = Session()
-        try:
+        with get_db() as db_session:
             existing_token = db_session.query(Token).first()
             if existing_token:
                 errors["token"] = "Ya existe un token. Elimínalo antes de agregar otro."
-        finally:
-            db_session.close()
     
         
         if len(errors) > 0:

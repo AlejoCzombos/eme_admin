@@ -30,6 +30,16 @@ class Especialista(Base):
             'days': [dia.nombre for dia in self.dias]
         }
     
+    def to_dict_admin(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'matricula': self.matricula,
+            'localidad': self.localidad,
+            'especialidad': self.especialidad,
+            'days': [dia for dia in self.dias]
+        }
+    
     async def __admin_repr__(self, request):
         return f"{self.nombre}"
 

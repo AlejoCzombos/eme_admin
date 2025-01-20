@@ -2,12 +2,11 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette_admin.auth import AuthProvider, AdminConfig, AdminUser
 from starlette_admin.exceptions import FormValidationError, LoginFailed
-from sqlalchemy.orm import Session
+from src.database import get_db
 from src.models.user import User 
 
 class MyAuthProvider(AuthProvider):
-    def __init__(self, db_session: Session):
-        self.db_session = db_session
+    def __init__(self):
         self.allow_paths = ["/login", "/statics/*", "/static/*"]
         self.allow_routes = ["/login", "/statics/*", "/static/*"]
         self.login_path = "/login"
@@ -26,25 +25,27 @@ class MyAuthProvider(AuthProvider):
                 {"username": "Ensure username has at least 3 characters"}
             )
 
-        user = self.db_session.query(User).filter_by(username=username).first()
-        if user and user.verify_password(password):
-            request.session.update({"username": username})
-            return response
+        with get_db() as db:
+            user = db.query(User).filter_by(username=username).first()
+            if user and user.verify_password(password):
+                request.session.update({"username": username})
+                return response
 
-        raise LoginFailed("Invalid username or password")
+            raise LoginFailed("Invalid username or password")
 
     async def is_authenticated(self, request) -> bool:
         username = request.session.get("username", None)
         if username:
-            user = self.db_session.query(User).filter_by(username=username).first()
-            if user:
-                request.state.user = {
-                    "id": user.id,
-                    "username": user.username,
-                    "roles": user.roles.split(","),
-                    "sucursal_id": user.branch_id,
-                }
-                return True
+            with get_db() as db:
+                user = db.query(User).filter_by(username=username).first()
+                if user:
+                    request.state.user = {
+                        "id": user.id,
+                        "username": user.username,
+                        "roles": user.roles.split(","),
+                        "sucursal_id": user.branch_id,
+                    }
+                    return True
         return False
     
     def get_admin_config(self, request: Request) -> AdminConfig:

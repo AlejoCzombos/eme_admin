@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.orm import sessionmaker
 from passlib.hash import bcrypt
 from src.models.benefits import Base
 

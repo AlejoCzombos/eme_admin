@@ -2,7 +2,7 @@ from starlette_admin.contrib.sqla import Admin, ModelView
 from starlette_admin import DropDown
 from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
-from src.database import engine, db_session
+from src.database import engine
 
 from src.models.benefits import *
 from src.views.benefits import *
@@ -21,8 +21,9 @@ admin = Admin(
     base_url="/admin",
     statics_dir="static/",
     login_logo_url="/admin/statics/logo.png",  # base_url + '/statics/' + path_to_the_file
-    auth_provider=MyAuthProvider(db_session=db_session),
+    auth_provider=MyAuthProvider(),
     middlewares=[Middleware(SessionMiddleware, secret_key=SECRET)],
+    debug=False
 )
 
 admin.add_view(

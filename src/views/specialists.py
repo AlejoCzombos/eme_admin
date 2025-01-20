@@ -4,7 +4,7 @@ from starlette.requests import Request
 
 from sqlalchemy import text, asc, desc
 from sqlalchemy.orm import joinedload
-from src.database import Session
+from src.database import get_db
 from src.models.specialists import Dia, Especialidad, Especialista
 
 from typing import Any, Dict, List, Optional, Sequence, Union
@@ -54,9 +54,8 @@ class EspecialistaView(ModelView):
         where = None,
         order_by = None,
     ):
-        db_session = Session()
-        try:
-            query = db_session.query(Especialista)
+        with get_db() as db_session:
+            query = db_session.query(Especialista).options(joinedload(Especialista.localidad), joinedload(Especialista.especialidad), joinedload(Especialista.dias))
             
             sucursal_id = request.state.user.get("sucursal_id")
             if sucursal_id:
@@ -69,6 +68,16 @@ class EspecialistaView(ModelView):
             if order_by:
                 for order in order_by:
                     key, direction = order.split(maxsplit=1)
+                    if key == "nombre":
+                        key = Especialista.nombre
+                    elif key == "matricula":
+                        key = Especialista.matricula
+                    elif key == "localidad":
+                        key = Especialista.localidad_id
+                    elif key == "especialidad":
+                        key = Especialista.especialidad_id
+                    elif key == "dias":
+                        key = Especialista.dias
                     if direction.lower() == "asc":
                         query = query.order_by(asc(key))
                     elif direction.lower() == "desc":
@@ -78,9 +87,6 @@ class EspecialistaView(ModelView):
             result = query.all()
             
             return result
-        finally:
-            # db_session.close()
-            pass
     
     def can_view_details(self, request: Request) -> bool:
         return "read" in request.state.user["roles"]

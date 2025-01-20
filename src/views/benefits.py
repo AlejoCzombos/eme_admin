@@ -5,11 +5,13 @@ from starlette.requests import Request
 from sqlalchemy_file import ImageField
 
 from sqlalchemy import text, asc, desc
-from src.database import Session
+from sqlalchemy.orm import joinedload
+from src.database import get_db
 from src.models.benefits import Beneficio, Localidad
 
 class BeneficioView(ModelView):
     search_builder = False
+    sortable_fields = ["titulo", "descripcion", "descuento", "categoria", "localidad"]
     fields = ["titulo", "descripcion", "descuento", 
               StringField("texto_descuento", label="Texto descuento", help_text="Si se completa este campo, reemplazará al campo de descuento al momento de mostrarlo"), 
               FileField("imagen", help_text="La imagen debe estar en formato cuadrado y debe poseer un tamaño máximo de 800x800 px", accept="image/*"), "categoria", "localidad"]
@@ -39,9 +41,8 @@ class BeneficioView(ModelView):
         where=None,
         order_by=None,
     ):
-        db_session = Session()
-        try:
-            query = db_session.query(Beneficio)
+        with get_db() as db_session:
+            query = db_session.query(Beneficio).options(joinedload(Beneficio.categoria), joinedload(Beneficio.localidad))
             
             sucursal_id = request.state.user.get("sucursal_id")
             if sucursal_id:
@@ -53,6 +54,16 @@ class BeneficioView(ModelView):
             if order_by:
                 for order in order_by:
                     key, direction = order.split(maxsplit=1)
+                    if key == "titulo":
+                        key = Beneficio.titulo
+                    elif key == "descuento":
+                        key = Beneficio.descuento
+                    elif key == "descripcion":
+                        key = Beneficio.descripcion
+                    elif key == "categoria":
+                        key = Beneficio.categoria_id
+                    elif key == "localidad":
+                        key = Beneficio.localidad_id
                     if direction.lower() == "asc":
                         query = query.order_by(asc(key))
                     elif direction.lower() == "desc":
@@ -61,9 +72,6 @@ class BeneficioView(ModelView):
             query = query.offset(skip).limit(limit)
             result = query.all()
             return result
-        finally:
-            # db_session.close()
-            pass
 
     def can_view_details(self, request: Request) -> bool:
         return "read" in request.state.user["roles"]
@@ -123,15 +131,15 @@ class LocalidadView(ModelView):
         where = None,
         order_by = None,
     ):
-        db_session = Session()
-        query = db_session.query(Localidad)
-    
-        sucursal_id = request.state.user.get("sucursal_id")
-        if sucursal_id:
-            query = query.filter(text("id = :localidad_id")).params(localidad_id=sucursal_id)
+        with get_db() as db_session:
+            query = db_session.query(Localidad)
+        
+            sucursal_id = request.state.user.get("sucursal_id")
+            if sucursal_id:
+                query = query.filter(text("id = :localidad_id")).params(localidad_id=sucursal_id)
 
-        results = query.all()
-        
-        db_session.close()
-        
-        return results
+            results = query.all()
+            
+            db_session.close()
+            
+            return results
