@@ -10,9 +10,9 @@ def create_users():
         return
     
     create_user(SUPER_ADMIN_NAME, SUPER_ADMIN_PASSWORD, "Super Admin")
-    create_user(RCIA_ADMIN_NAME, RCIA_ADMIN_PASSWORD, 1, "Admin Resistencia")
-    create_user(CTES_ADMIN_NAME, CTES_ADMIN_PASSWORD, 2, "Admin Corrientes")
-    create_user(RSP_ADMIN_NAME, RSP_ADMIN_PASSWORD, 3, "Admin Saenz Peña")
+    create_user(RCIA_ADMIN_NAME, RCIA_ADMIN_PASSWORD, "Admin Resistencia", 1)
+    create_user(CTES_ADMIN_NAME, CTES_ADMIN_PASSWORD, "Admin Corrientes", 2)
+    create_user(RSP_ADMIN_NAME, RSP_ADMIN_PASSWORD, "Admin Saenz Peña", 3)
 
 def create_user(username, password, name, branch_id = None):
     if not password:
