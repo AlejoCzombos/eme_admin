@@ -14,7 +14,7 @@ class BeneficioView(ModelView):
     sortable_fields = ["titulo", "descripcion", "descuento", "categoria", "localidad"]
     fields = ["titulo", "descripcion", "descuento", 
               StringField("texto_descuento", label="Texto descuento", help_text="Si se completa este campo, reemplazará al campo de descuento al momento de mostrarlo"), 
-              FileField("imagen", help_text="La imagen debe estar en formato cuadrado y debe poseer un tamaño máximo de 800x800 px", accept="image/*"), "categoria", "localidad"]
+              FileField("imagen", help_text="La imagen debe estar en formato cuadrado y debe poseer como tamaño mínimo 200 x 200 px y como máximo 800 x 800 px", accept="image/*"), "categoria", "localidad"]
     
     async def validate(self, request: Request, data) -> None:
         errors: Dict[str, str] = dict()

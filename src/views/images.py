@@ -32,7 +32,7 @@ class BannerView(ModelView):
         return "delete" in request.state.user["roles"]
 
 class SponsorView(ModelView):
-    fields = [FileField("imagen", help_text="El logo debe estar en formato cuadrado y debe poseer un tamaño máximo de 800x800 px", accept="image/*")]
+    fields = [FileField("imagen", help_text="El logo debe estar en formato cuadrado y debe poseer como tamaño mínimo 200 x 200 px y como máximo 800 x 800 px", accept="image/*")]
     
     async def validate(self, request: Request, data) -> None:
         errors: Dict[str, str] = dict()

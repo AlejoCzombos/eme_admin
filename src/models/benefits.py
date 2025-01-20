@@ -40,6 +40,7 @@ class Beneficio(Base):
             "title": self.titulo,
             "description": self.descripcion,
             "discount": self.descuento,
+            "text_discount": self.texto_descuento,
             "category": self.categoria.nombre,
             "locality": self.localidad_id,
             "imagen_url": imagen_url
