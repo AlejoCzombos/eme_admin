@@ -1,6 +1,6 @@
 from starlette_admin.contrib.sqla import ModelView
 from starlette_admin.exceptions import FormValidationError
-from starlette_admin import StringField, FileField
+from starlette_admin import StringField, FileField, IntegerField
 from starlette.requests import Request
 from sqlalchemy_file import ImageField
 
@@ -11,23 +11,33 @@ from src.models.benefits import Beneficio, Localidad
 
 class BeneficioView(ModelView):
     search_builder = False
-    sortable_fields = ["titulo", "descripcion", "descuento", "categoria", "localidad"]
-    fields = ["titulo", "descripcion", "descuento", 
+    sortable_fields = ["id", "titulo", "descripcion", "descuento", "categoria", "localidad"]
+    pk_attr = "id"
+    fields = [IntegerField("id", disabled=False), "titulo", "descripcion", "descuento", 
               StringField("texto_descuento", label="Texto descuento", help_text="Si se completa este campo, reemplazará al campo de descuento al momento de mostrarlo"), 
               FileField("imagen", help_text="La imagen debe estar en formato cuadrado y debe poseer como tamaño mínimo 200 x 200 px y como máximo 800 x 800 px", accept="image/*"), "categoria", "localidad"]
     
     async def validate(self, request: Request, data) -> None:
+        id_benefit = request.path_params.get("pk")
+        
         errors: Dict[str, str] = dict()
         if not data.get("titulo"):
             errors["titulo"] = "El título es requerido"
         if not data.get("descuento"):
             errors["descuento"] = "El descuento es requerido"
-        if not data.get("imagen") or not data["imagen"][0]:
-            errors["imagen"] = "La imagen es requerida"
         if not data.get("categoria"):
             errors["categoria"] = "La categoría es requerida"
         if not data.get("localidad"):
             errors["localidad"] = "La localidad es requerida"
+        
+        if not data.get("imagen") or not data["imagen"][0]:
+            if not id_benefit:
+                errors["imagen"] = "La imagen es requerida"
+            else:
+                with get_db() as db_session:
+                    benefit = db_session.query(Beneficio).get(id_benefit)
+                    if not benefit.imagen:
+                        errors["imagen"] = "La imagen es requerida"
         
         if len(errors) > 0:
             raise FormValidationError(errors)
