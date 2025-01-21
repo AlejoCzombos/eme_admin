@@ -11,6 +11,7 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 class EspecialidadView(ModelView):
     search_builder = False
+    fields = ["nombre"]
     
     def can_view_details(self, request: Request) -> bool:
         return "read" in request.state.user["roles"]
@@ -27,6 +28,7 @@ class EspecialidadView(ModelView):
 class EspecialistaView(ModelView):
     search_builder = False
     sortable_fields = ["nombre", "matricula", "localidad", "especialidad", "dias"]
+    fields = ["nombre", "matricula", "localidad", "especialidad", "dias"]
     
     async def validate(self, request: Request, data) -> None:
         errors: Dict[str, str] = dict()
@@ -70,6 +72,8 @@ class EspecialistaView(ModelView):
                     key, direction = order.split(maxsplit=1)
                     if key == "nombre":
                         key = Especialista.nombre
+                    if key == "id":
+                        key = Especialista.id
                     elif key == "matricula":
                         key = Especialista.matricula
                     elif key == "localidad":
@@ -102,6 +106,7 @@ class EspecialistaView(ModelView):
 
 class DiaView(ModelView):
     search_builder = False
+    fields = ["nombre"]
     
     # def is_accessible(self, request: Request) -> bool:
     #     return "admin" in request.state.user["roles"]

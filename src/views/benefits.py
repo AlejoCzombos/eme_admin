@@ -56,6 +56,8 @@ class BeneficioView(ModelView):
                     key, direction = order.split(maxsplit=1)
                     if key == "titulo":
                         key = Beneficio.titulo
+                    elif key == "id":
+                        key = Beneficio.id
                     elif key == "descuento":
                         key = Beneficio.descuento
                     elif key == "descripcion":
@@ -88,6 +90,7 @@ class BeneficioView(ModelView):
 
 class CategoriaBeneficioView(ModelView):
     search_builder = False
+    fields = ["nombre"]
     
     # def is_accessible(self, request: Request) -> bool:
     #     return "admin" in request.state.user["roles"]
@@ -107,6 +110,7 @@ class CategoriaBeneficioView(ModelView):
 
 class LocalidadView(ModelView):
     search_builder = False
+    fields = ["nombre"]
     
     # def is_accessible(self, request: Request) -> bool:
     #     return "admin" in request.state.user["roles"]
