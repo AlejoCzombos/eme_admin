@@ -13,7 +13,7 @@ class BeneficioView(ModelView):
     search_builder = False
     sortable_fields = ["id", "titulo", "descripcion", "descuento", "categoria", "localidad"]
     pk_attr = "id"
-    fields = [IntegerField("id", disabled=False), "titulo", "descripcion", "descuento", 
+    fields = ["titulo", "descripcion", "descuento", 
               StringField("texto_descuento", label="Texto descuento", help_text="Si se completa este campo, reemplazará al campo de descuento al momento de mostrarlo"), 
               FileField("imagen", help_text="La imagen debe estar en formato cuadrado y debe poseer como tamaño mínimo 200 x 200 px y como máximo 800 x 800 px", accept="image/*"), "categoria", "localidad"]
     
@@ -101,6 +101,35 @@ class BeneficioView(ModelView):
 class CategoriaBeneficioView(ModelView):
     search_builder = False
     fields = ["nombre"]
+    
+    # def is_accessible(self, request: Request) -> bool:
+    #     return "admin" in request.state.user["roles"]
+    
+    def can_view_details(self, request: Request) -> bool:
+        return "read" in request.state.user["roles"]
+
+    def can_create(self, request: Request) -> bool:
+        return "create" in request.state.user["roles"]
+
+    def can_edit(self, request: Request) -> bool:
+        return "edit" in request.state.user["roles"]
+
+    def can_delete(self, request: Request) -> bool:
+        return "delete" in request.state.user["roles"]
+
+
+class BeneficiosHomeView(ModelView):
+    fields = ["beneficio"]
+    
+    async def validate(self, request: Request, data) -> None:
+        errors: Dict[str, str] = dict()
+        if not data.get("beneficio"):
+            errors["beneficio"] = "El Beneficio es requerido"
+        
+        if len(errors) > 0:
+            raise FormValidationError(errors)
+        return await super().validate(request, data)
+    
     
     # def is_accessible(self, request: Request) -> bool:
     #     return "admin" in request.state.user["roles"]

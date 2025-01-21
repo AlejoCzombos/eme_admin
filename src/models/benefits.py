@@ -4,6 +4,8 @@ from sqlalchemy_file import ImageField
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_file.validators import ImageValidator
 
+from src.utils import remove_query_params
+
 Base = declarative_base()
 
 class Beneficio(Base):
@@ -43,8 +45,11 @@ class Beneficio(Base):
             "text_discount": self.texto_descuento,
             "category": self.categoria.nombre,
             "locality": self.localidad_id,
-            "imagen_url": imagen_url
+            "imagen_url": remove_query_params(imagen_url),
         }
+    
+    async def __admin_repr__(self, request):
+        return f"{self.titulo} {self.descuento}%"
 
 
 class CategoriaBeneficio(Base):
@@ -58,6 +63,20 @@ class CategoriaBeneficio(Base):
 
     async def __admin_repr__(self, request):
         return f"{self.nombre}"
+
+
+class BeneficiosHome(Base):
+    __tablename__ = 'beneficios_home'
+
+    id = Column(Integer, primary_key=True)
+    beneficio_id = Column(Integer, ForeignKey('beneficio.id'))
+    beneficio = relationship('Beneficio')
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "url": remove_query_params(self.beneficio.imagen.url),
+        }
 
 
 class Localidad(Base):

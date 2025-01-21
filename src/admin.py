@@ -39,12 +39,11 @@ admin.add_view(
 
 admin.add_view(
     DropDown(
-        "Especialistas",
+        "Policonsultorios",
         icon="fa fa-user-md",
         views=[
             EspecialistaView(Especialista, icon="fas fa-list", label="Especialistas"),
             EspecialidadView(Especialidad, icon="fas fa-list", label="Especialidades"),
-            # DiaView(Dia, icon="fas fa-list")
         ]
     )
 )
@@ -67,7 +66,7 @@ admin.add_view(
         icon="fa fa-image",
         views=[
             BannerView(Banner, icon="fas fa-list", label="Banners"),
-            SponsorView(Sponsor, icon="fas fa-list", label="Sponsors"),
+            BeneficiosHomeView(BeneficiosHome, icon="fas fa-list", label="Beneficios Home")
         ]
     )
 )

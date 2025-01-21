@@ -30,30 +30,3 @@ class BannerView(ModelView):
 
     def can_delete(self, request: Request) -> bool:
         return "delete" in request.state.user["roles"]
-
-class SponsorView(ModelView):
-    fields = [FileField("imagen", help_text="El logo debe estar en formato cuadrado y debe poseer como tamaño mínimo 200 x 200 px y como máximo 800 x 800 px", accept="image/*")]
-    
-    async def validate(self, request: Request, data) -> None:
-        errors: Dict[str, str] = dict()
-        if not data.get("logo") or not data["logo"][0]:
-            errors["logo"] = "El logo es requerido"
-        
-        if len(errors) > 0:
-            raise FormValidationError(errors)
-        return await super().validate(request, data)
-    
-    # def is_accessible(self, request: Request) -> bool:
-    #     return "admin" in request.state.user["roles"]
-    
-    def can_view_details(self, request: Request) -> bool:
-        return "read" in request.state.user["roles"]
-
-    def can_create(self, request: Request) -> bool:
-        return "create" in request.state.user["roles"]
-
-    def can_edit(self, request: Request) -> bool:
-        return "edit" in request.state.user["roles"]
-
-    def can_delete(self, request: Request) -> bool:
-        return "delete" in request.state.user["roles"]

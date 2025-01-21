@@ -5,6 +5,8 @@ from src.models.benefits import Base
 from sqlalchemy_file import ImageField
 from sqlalchemy_file.validators import ImageValidator
 
+from src.utils import remove_query_params
+
 class Banner(Base):
     __tablename__ = 'Banner'
     
@@ -26,31 +28,5 @@ class Banner(Base):
         
         return {
             "id": self.id,
-            "url": imagen_url
-        }
-
-class Sponsor(Base):
-    __tablename__ = 'Sponsor'
-    
-    id = Column(Integer, primary_key=True)
-    logo = Column(
-        ImageField(
-            image_validator=ImageValidator(
-                allowed_content_types=["image/jpeg", "image/png", "image/webp", "image/svg+xml"],
-                min_wh=(200, 200),
-                max_wh=(800, 800),
-                min_aspect_ratio=1.0,
-                max_aspect_ratio=1.0
-            ),
-            upload_storage="default"
-        ),
-        nullable=False,
-    )
-    
-    def to_dict(self):
-        imagen_url = getattr(self.logo, 'url', '')
-        
-        return {
-            "id": self.id,
-            "url": imagen_url
+            "url": remove_query_params(imagen_url),
         }
