@@ -53,9 +53,12 @@ admin.add_view(
         "Administradores",
         icon="fa fa-user",
         views=[
+            FormErrorsView(FormError, icon="fas fa-list", label="Errores de formularios"),
             AdministradorView(Administrador, icon="fas fa-list", label="Administradores"),
-            AdministradorActualView(AdministradorActual, icon="fas fa-list", label="Administrador actual (único)"),
-            TokenView(Token, icon="fas fa-list", label="Token actual (único)")
+            TokenView(Token, icon="fas fa-list", label="Token actual (único)"),
+            AdministradorActualCorrientesView(AdministradorActualCorrientes, icon="fas fa-list", label="Admin actual Corrientes (único)"),
+            AdministradorActualResistenciaView(AdministradorActualResistencia, icon="fas fa-list", label="Admin actual Resistencia (único)"),
+            AdministradorActualSaenzPeñaView(AdministradorActualSaenzPeña, icon="fas fa-list", label="Admin actual Sáenz Peña (Sin implementar)"),
         ]
     )
 )
@@ -66,7 +69,7 @@ admin.add_view(
         icon="fa fa-image",
         views=[
             BannerView(Banner, icon="fas fa-list", label="Banners"),
-            BeneficiosHomeView(BeneficiosHome, icon="fas fa-list", label="Beneficios Home")
+            BeneficiosHomeView(BeneficiosHome, icon="fas fa-list", label="Comercios adheridos visibles en el home")
         ]
     )
 )

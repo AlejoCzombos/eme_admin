@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from src.models.benefits import Base
 
@@ -14,8 +15,23 @@ class Administrador(Base):
     async def __admin_repr__(self, request):
         return f"{self.nombre} ({self.correo})"
 
-class AdministradorActual(Base):
-    __tablename__ = 'administrador_actual'
+class AdministradorActualResistencia(Base):
+    __tablename__ = 'administrador_actual_resistencia'
+    
+    id = Column(Integer, primary_key=True)
+    administrador_id = Column(Integer, ForeignKey('administrador.id'), nullable=False, unique=True)
+    administrador = relationship('Administrador')
+
+
+class AdministradorActualCorrientes(Base):
+    __tablename__ = 'administrador_actual_corrientes'
+    
+    id = Column(Integer, primary_key=True)
+    administrador_id = Column(Integer, ForeignKey('administrador.id'), nullable=False, unique=True)
+    administrador = relationship('Administrador')
+
+class AdministradorActualSaenzPeña(Base):
+    __tablename__ = 'administrador_actual_saenz_pena'
     
     id = Column(Integer, primary_key=True)
     administrador_id = Column(Integer, ForeignKey('administrador.id'), nullable=False, unique=True)
@@ -29,3 +45,11 @@ class Token(Base):
     
     async def __admin_repr__(self, request):
         return f"{self.token}"
+
+class FormError(Base):
+    __tablename__ = 'form_errors'
+    
+    id = Column(Integer, primary_key=True)
+    tipo_de_error = Column(String(250), nullable=False)
+    mensaje_error = Column(String(250), nullable=False)
+    fecha_hora = Column(DateTime(timezone=True), server_default=func.now())

@@ -22,6 +22,10 @@ class Banner(Base):
         ),
         nullable=False
     )
+    titulo = Column(String(25), nullable=True)
+    descripcion = Column(String(230), nullable=True)
+    boton_texto = Column(String(25), nullable=True)
+    boton_url = Column(String(200), nullable=True)
     
     def to_dict(self):
         imagen_url = getattr(self.imagen, 'url', '')
@@ -29,4 +33,8 @@ class Banner(Base):
         return {
             "id": self.id,
             "url": remove_query_params(imagen_url),
+            "title": self.titulo,
+            "description": self.descripcion,
+            "button_text": self.boton_texto,
+            "button_url": self.boton_url
         }
