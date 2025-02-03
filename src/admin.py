@@ -50,15 +50,15 @@ admin.add_view(
 
 admin.add_view(
     DropDown(
-        "Administradores",
+        "Admin CRM",
         icon="fa fa-user",
         views=[
             FormErrorsView(FormError, icon="fas fa-list", label="Errores de formularios"),
             AdministradorView(Administrador, icon="fas fa-list", label="Administradores"),
             TokenView(Token, icon="fas fa-list", label="Token actual (único)"),
-            AdministradorActualCorrientesView(AdministradorActualCorrientes, icon="fas fa-list", label="Admin actual Corrientes (único)"),
-            AdministradorActualResistenciaView(AdministradorActualResistencia, icon="fas fa-list", label="Admin actual Resistencia (único)"),
-            AdministradorActualSaenzPeñaView(AdministradorActualSaenzPeña, icon="fas fa-list", label="Admin actual Sáenz Peña (Sin implementar)"),
+            AdministradorActualCorrientesView(AdministradorActualCorrientes, icon="fas fa-list", label="Admin CRM Corrientes (único)"),
+            AdministradorActualResistenciaView(AdministradorActualResistencia, icon="fas fa-list", label="Admin CRM Resistencia (único)"),
+            AdministradorActualSaenzPeñaView(AdministradorActualSaenzPeña, icon="fas fa-list", label="Admin CRM Sáenz Peña (Sin implementar)"),
         ]
     )
 )
