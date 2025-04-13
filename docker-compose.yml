@@ -1,13 +1,17 @@
 services:
   eme_front:
-    image: alejoczombos/eme-front:latest
+    image: 975049932770.dkr.ecr.sa-east-1.amazonaws.com/sitio-web/frontend:latest
+    #image: alejoczombos/eme-front:latest
     ports:
       - "80:80"
+    depends_on:
+      - eme_back
     networks:
       - app-network
 
   eme_back:
-    image: alejoczombos/eme-back:latest
+    image: 975049932770.dkr.ecr.sa-east-1.amazonaws.com/sitio-web/backend:latest
+    #image: alejoczombos/eme-back:latest
     ports:
       - "8000:8000"
     restart: always
@@ -32,7 +36,8 @@ services:
       SUPER_ADMIN_NAME: ${SUPER_ADMIN_NAME}
       SUPER_ADMIN_PASSWORD: ${SUPER_ADMIN_PASSWORD}
     depends_on:
-      - eme_db
+      eme_db:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -43,6 +48,11 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u<user>", "-p<password>"] # Ajusta user/password si no usas root
+      interval: 10s # Intervalo entre chequeos
+      timeout: 5s  # Tiempo máximo para que el chequeo responda
+      retries: 5   # Número de reintentos antes de marcar como no saludable
     ports:
       - "3306:3306"
     volumes:
